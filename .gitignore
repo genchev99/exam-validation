@@ -238,3 +238,5 @@ modules.xml
 /build/
 
 # End of https://www.toptal.com/developers/gitignore/api/phpstorm,phpstorm+iml,phpstorm+all,phpunit
+
+.env*
