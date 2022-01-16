@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . "../helpers.php";
+require __DIR__ . "/../helpers.php";
 
 class PDOConfig extends PDO {
     private $engine;
@@ -22,5 +22,3 @@ class PDOConfig extends PDO {
         parent::__construct($dsn, $this->user, $this->pass);
     }
 }
-
-?>
