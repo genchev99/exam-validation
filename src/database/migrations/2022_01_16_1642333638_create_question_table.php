@@ -1,20 +1,27 @@
 <?php
 require_once(__DIR__ . '/../config.php');
 
-class CreateUserTable {
+class CreateQuestionTable {
     private function connection() {
         return new PDOConfig();
     }
 
     public function up() {
-        $table_name = 'Users';
+        $table_name = 'Questions';
         $sql = 'CREATE TABLE `' . $table_name . '` (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(64) NOT NULL,
-            password_hash VARCHAR(128) NOT NULL,
-            first_name VARCHAR(64) NOT NULL,
-            last_name VARCHAR(64) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            timestamp TIMESTAMP NOT NULL,
+            faculty_number VARCHAR(16) NOT NULL,
+            question_number INT NOT NULL,
+            purpose_of_question VARCHAR(1024) NOT NULL,
+            question VARCHAR(2048) NOT NULL,
+            hardness INT NOT NULL,
+            response_on_error VARCHAR(1024) NOT NULL,
+            response_on_success VARCHAR(1024) NOT NULL,
+            note VARCHAR(1024) NOT NULL,
+            type INT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )';
         try {
             $connection = $this->connection();
@@ -30,7 +37,7 @@ class CreateUserTable {
     }
 
     public function down() {
-        $table_name = 'Users';
+        $table_name = 'Questions';
         $sql = 'DROP TABLE IF EXISTS `' . $table_name . '`';
 
         try {

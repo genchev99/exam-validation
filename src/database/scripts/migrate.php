@@ -1,6 +1,8 @@
 <?php
-//require __DIR__ . "/hash.php";
-require __DIR__ . "/../migrations/2022_01_15_1642257948_create_user_table.php";
+
+foreach (glob(__DIR__ . "/../migrations/*.php") as $filename) {
+    include $filename;
+}
 
 $UP = "up";
 $DOWN = "down";
@@ -22,25 +24,25 @@ switch ($direction):
 
             $created = $class->up();
             if (!$created) {
-                echo "There was an error with migration: " . $migration_file;
+                echo "There was an error with migration: " . $migration_file . PHP_EOL;
                 throw new ErrorException("Migration error" . $migration_file);
             }
 
-            echo "Migration UP" . $migration_file . " was successful";
+            echo "Migration UP " . $migration_file . " was successful" . PHP_EOL;
         }
         break;
     case $DOWN:
-        foreach ($migrations_files as $migration_file) {
+        foreach (array_reverse($migrations_files) as $migration_file) {
             $migration_file_path = __DIR__ . "/../migrations" . "/" . $migration_file;
             $class = getClass($migration_file);
 
             $created = $class->down();
             if (!$created) {
-                echo "There was an error with migration: " . $migration_file;
+                echo "There was an error with migration: " . $migration_file . PHP_EOL;
                 throw new ErrorException("Migration error" . $migration_file);
             }
 
-            echo "Migration DOWN " . $migration_file . " was successful";
+            echo "Migration DOWN " . $migration_file . " was successful" . PHP_EOL;
         }
         break;
     default:
