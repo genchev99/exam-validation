@@ -1,39 +1,57 @@
-const control = document.importNode(document.querySelector('template').content, true).childNodes[0];
-control.addEventListener('pointerdown', oncontroldown, true);
+// https://css-tricks.com/how-to-create-actions-for-selected-text-with-the-selection-api/
+let control = null
 
-document.querySelector('p').onpointerup = () => {
-  const selection = document.getSelection()
-  const text = selection.toString()
+window.addEventListener('DOMContentLoaded', (event) => {
+  console.log('DOM fully loaded and parsed')
 
-  if (text === "") {
-    return;
+  control = document.importNode(document.querySelector('div.template'), true)
+  console.log(control.childNodes)
+
+  control.style.display = 'block'
+
+
+  for (const button of control.querySelectorAll('button')) {
+    button.addEventListener('onpointerdown', on_control_down, true)
   }
 
-  const rect = selection.getRangeAt(0).getBoundingClientRect();
+  for (const el of document.querySelectorAll('p.editable')) {
+    el.onpointerup = on_selection
+  }
 
-  control.style.top = `calc(${rect.top}px - 48px)`;
-  control.style.left = `calc(${rect.left}px + calc(${rect.width}px / 2) - 40px)`;
-  control['text'] = text;
+  document.onpointerdown = on_pointer_down
+})
 
-  document.body.appendChild(control);
-}
-
-function oncontroldown(event) {
-  console.log(event);
-
-  // window.open(`https://twitter.com/intent/tweet?text=${this.text}`);
+function on_control_down(event) {
+  console.log('on control down')
   this.remove();
   document.getSelection().removeAllRanges();
-  event.stopPropagation();
+  event.stopPropagation()
 }
 
-document.onpointerdown = () => {
-  const control = document.querySelector('#control');
+function on_pointer_down() {
+  console.log('pointer')
 
   if (!control) {
-    return;
+    return
   }
 
   control.remove();
   document.getSelection().removeAllRanges();
+}
+
+function on_selection() {
+  const selection = document.getSelection()
+  const selectedText = selection.toString()
+
+  if (!selectedText) {
+    return
+  }
+
+  const {top, left, width} = selection.getRangeAt(0).getBoundingClientRect();
+
+  control.style.top = `calc(${top}px - 48px)`;
+  control.style.left = `calc(${left}px + calc(${width}px / 2) - 40px)`;
+  control['selectedText'] = selectedText;
+
+  document.body.appendChild(control);
 }

@@ -50,7 +50,7 @@ body {
 /* !!!!!! */
 
 .btn-group button {
-	background-color: #f0f0f0;
+	background-color: #fcfcfc;
 	border: 1px solid #cfcfcf;
 	padding: 5px 12px; /* Some padding */
 	cursor: pointer; /* Pointer/hand icon */
@@ -98,4 +98,9 @@ button.edit-btn {
 
 button.comment-btn {
 	color: #00459e;
+}
+
+div.template {
+	position: absolute;
+	display: none;
 }
