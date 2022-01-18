@@ -1,0 +1,101 @@
+#control {
+	background-image: url("data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width='40px' height='40px'><foreignObject width='40px' height='40px'><div xmlns='http://www.w3.org/1999/xhtml' style='width:40px;height:40px;line-height:40px;text-align:center;color:transparent;text-shadow: 0 0 yellow, 2px 4px black, -1px -1px black;font-size:35px;'>💬</div></foreignObject></svg>");
+	cursor: pointer;
+	position: absolute;
+	width: 40px;
+	height: 40px;
+}
+
+#control::before {
+	background-color: black;
+	color: white;
+	content: " tweet this! ";
+	display: block;
+	font-weight: bold;
+	margin-left: 37px;
+	margin-top: 6px;
+	padding: 2px;
+	width: max-content;
+	height: 20px;
+}
+
+article {
+	background: white;
+	border-radius: 4px;
+	font-size: 13pt;
+	margin: auto;
+	padding: 30px;
+	position: absolute;
+	text-align: justify;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 300px;
+	height: 400px;
+}
+
+h1 {
+	font-size: 17pt;
+	text-align: center;
+	text-decoration-line: underline;
+	text-decoration-color: yellow;
+}
+
+body {
+	background-image: linear-gradient(45deg, beige, azure);
+	font-family: 'crimson text';
+}
+
+/* !!!!!! */
+
+.btn-group button {
+	background-color: #f0f0f0;
+	border: 1px solid #cfcfcf;
+	padding: 5px 12px; /* Some padding */
+	cursor: pointer; /* Pointer/hand icon */
+	float: left; /* Float the buttons side by side */
+	font-size: 1.5em;
+}
+
+/* Borders for most left child */
+.btn-group button:first-child {
+	border-bottom-left-radius: 20px;
+	border-top-left-radius: 20px;
+}
+
+
+/* Borders for most right child */
+.btn-group button:last-child {
+	border-bottom-right-radius: 20px;
+	border-top-right-radius: 20px;
+}
+
+/* prevent inner borders */
+.btn-group button:not(:last-child) {
+	border-right: none;
+}
+
+.btn-group button:not(:first-child) {
+	border-left: none;
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+	background-color: #e3e3e3;
+}
+
+button.edit-btn {
+	color: #009427;
+}
+
+button.comment-btn {
+	color: #00459e;
+}
