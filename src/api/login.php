@@ -3,9 +3,6 @@ require_once __DIR__ . "/../database/models/user.php";
 require_once __DIR__ . "/../database/models/token.php";
 require_once __DIR__ . "/../utils.php";
 
-$errors = [];
-$response = [];
-
 session_start();
 
 header('Content-Type: application/json');
