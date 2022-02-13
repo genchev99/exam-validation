@@ -1,20 +1,21 @@
 <?php
 require_once(__DIR__ . '/../config.php');
 
-class CreateQuizTable {
+class CreateTokenTable {
     private function connection() {
         return new PDOConfig();
     }
 
     public function up() {
-        $table_name = 'Quizzes';
+        $table_name = 'Tokens';
         $sql = 'CREATE TABLE `' . $table_name . '` (
             id INT AUTO_INCREMENT PRIMARY KEY,
+            token VARCHAR(128) NOT NULL,
+            expires_at TIMESTAMP,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            title VARCHAR(1024) NOT NULL,
             user_id INT,
-            INDEX us_id (user_id),
+            INDEX u_id (user_id),
             FOREIGN KEY (user_id)
                 REFERENCES Users(id)
                 ON DELETE CASCADE
@@ -33,7 +34,7 @@ class CreateQuizTable {
     }
 
     public function down() {
-        $table_name = 'Quizzes';
+        $table_name = 'Tokens';
         $sql = 'DROP TABLE IF EXISTS `' . $table_name . '`';
 
         try {
@@ -50,4 +51,3 @@ class CreateQuizTable {
         }
     }
 }
-
