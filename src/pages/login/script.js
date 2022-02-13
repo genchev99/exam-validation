@@ -2,7 +2,7 @@
   /**
    * Get the login button
    */
-  const login = document.getElementById('login');
+  const login = document.querySelector('form#login-form > input[type=submit]');
 
   /**
    * Listen for click event on the login button
@@ -51,19 +51,17 @@ function sendForm(event) {
    */
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
-  const remember = document.getElementById('remember-me').checked;
 
   /**
    * Send POST request with user's data to api.php/login
    */
   sendRequest(
-    'api/login.php',
+    '/api/login.php',
     {
       method: 'POST',
       data: `data=${JSON.stringify({
         username,
         password,
-        remember,
       })}`
     },
     load,
@@ -84,5 +82,6 @@ function load(response) {
   } else {
     const errors = document.getElementById('errors');
     errors.innerHTML = response.error;
+    errors.style.display = "block";
   }
 }

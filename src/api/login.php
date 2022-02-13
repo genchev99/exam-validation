@@ -37,14 +37,12 @@ function handle() {
             $_SESSION['username'] = $user->username;
             $_SESSION['user_id'] = $user->id;
 
-            if ($data['remember']) {
-                $token_model = new TokenModel();
-                $token = bin2hex(random_bytes(8));
-                $expires = time() + 30 * 24 * 60 * 60;
+            $token_model = new TokenModel();
+            $token = bin2hex(random_bytes(8));
+            $expires = time() + 30 * 24 * 60 * 60;
 
-                setcookie('token', $token, $expires, '/');
-                $token_model->create_token($token, $_SESSION['user_id'], $expires);
-            }
+            setcookie('token', $token, $expires, '/');
+            $token_model->create_token($token, $_SESSION['user_id'], $expires);
         } else {
             http_status_code(401);
             return 'Invalid password';
