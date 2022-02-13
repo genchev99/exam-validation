@@ -20,7 +20,7 @@
 function sendRequest(url, options, successCallback, errorCallback) {
   const request = new XMLHttpRequest();
 
-  request.addEventListener('load', function() {
+  request.addEventListener('load', function () {
     console.log(request.responseText)
     const response = JSON.parse(request.responseText);
 
@@ -71,14 +71,14 @@ function sendForm(event) {
 
 /**
  * Handle the received response from the server
- * If there were no errors found on validation, the index.html is loaded.
+ * If there were no errors found on validation, the index.php is loaded.
  * Else the errors are displayed to the user.
  * @param {*} response
  */
 function load(response) {
   console.log(response)
   if (response.success) {
-    window.location = 'index.html';
+    window.location = '/pages/home/index.php';
   } else {
     const errors = document.getElementById('errors');
     errors.innerHTML = response.error;

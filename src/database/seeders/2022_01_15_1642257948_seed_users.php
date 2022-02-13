@@ -1,15 +1,12 @@
 <?php
 require_once(__DIR__ . '/../config.php');
 
-class SeedUsers
-{
-    private function connection()
-    {
+class SeedUsers {
+    private function connection() {
         return new PDOConfig();
     }
 
-    public function seed()
-    {
+    public function seed() {
         $table_name = 'Users';
         $sql = 'INSERT INTO `' . $table_name . "` (
             username,

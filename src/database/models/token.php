@@ -19,14 +19,14 @@ class TokenModel extends PDOStatement {
      * Create user session token
      */
     public function create_token($token, $user_id, $expires) {
-        $sql = "INSERT INTO Tokens(token, user_id, expires) VALUES (:token, :user_id, :expires)";
+        $sql = "INSERT INTO Tokens(token, user_id, expires_at) VALUES (:token, :user_id, :expires_at)";
 
         try {
             $connection = $this->connection();
             $statement = $connection->prepare($sql);
             $statement->bindValue(':token', $token);
             $statement->bindValue(':user_id', $user_id);
-            $statement->bindValue(':expires', $expires);
+            $statement->bindValue(':expires_at', $expires->format('Y-m-d H:i:s'));
             $statement->execute();
             $connection = null;
         } catch (PDOException $e) {

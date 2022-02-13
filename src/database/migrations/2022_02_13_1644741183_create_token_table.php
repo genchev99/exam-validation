@@ -11,7 +11,7 @@ class CreateTokenTable {
         $sql = 'CREATE TABLE `' . $table_name . '` (
             id INT AUTO_INCREMENT PRIMARY KEY,
             token VARCHAR(128) NOT NULL,
-            expires TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            expires_at TIMESTAMP,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             user_id INT,

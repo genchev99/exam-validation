@@ -21,11 +21,11 @@ class UserModel extends PDOStatement {
 
     public function _toString(): string {
         return "id: " . $this->id .
-               "username: " . $this->username .
-               "password_hash: " . $this->password_hash .
-               "faculty_number: " . $this->faculty_number .
-               "created_at: " . $this->created_at .
-               "updated_at: " . $this->updated_at;
+            "username: " . $this->username .
+            "password_hash: " . $this->password_hash .
+            "faculty_number: " . $this->faculty_number .
+            "created_at: " . $this->created_at .
+            "updated_at: " . $this->updated_at;
     }
 
     public static function from_dict($dict): UserModel {
@@ -40,7 +40,9 @@ class UserModel extends PDOStatement {
         return $record;
     }
 
-    private function _select($sql) {
+    public function select() {
+        $sql = "SELECT * FROM " . $this->table_name;
+
         try {
             $connection = $this->connection();
             $statement = $connection->query($sql);
@@ -53,22 +55,27 @@ class UserModel extends PDOStatement {
         }
     }
 
-    public function select() {
-        $sql = "SELECT * FROM ". $this->table_name;
-
-        return $this->_select($sql);
-    }
-
     public function select_by_username($username) {
-        $sql = "SELECT * FROM ". $this->table_name . " WHERE username='" . $username . "'";
+        $sql = "SELECT * FROM Users WHERE username=:username";
 
-        return $this->_select($sql);
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':username', $username);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $connection = null;
+            return array_map('self::from_dict', $result);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
 
     public function select_one_by_username($username) {
         $user_records = $this->select_by_username($username);
 
-        if (empty($user_record)) {
+        if (empty($user_records)) {
             throw new ErrorException("The user couldn't be found");
         }
 

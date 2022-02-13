@@ -9,4 +9,3 @@ function test_input($input): string {
     $input = htmlspecialchars($input);
     return stripslashes($input);
 }
-

@@ -39,16 +39,16 @@ function handle() {
 
             $token_model = new TokenModel();
             $token = bin2hex(random_bytes(8));
-            $expires = time() + 30 * 24 * 60 * 60;
+            $expires = new DateTime('tomorrow');
 
-            setcookie('token', $token, $expires, '/');
+            setcookie('token', $token, $expires->getTimestamp(), '/');
             $token_model->create_token($token, $_SESSION['user_id'], $expires);
         } else {
-            http_status_code(401);
+//            http_response_code(401);
             return 'Invalid password';
         }
     } else {
-        http_status_code(400);
+//        http_response_code(400);
         return 'Invalid request';
     }
 }
