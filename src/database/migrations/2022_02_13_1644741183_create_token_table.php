@@ -1,20 +1,24 @@
 <?php
 require_once(__DIR__ . '/../config.php');
 
-class CreateUserTable {
+class CreateTokenTable {
     private function connection() {
         return new PDOConfig();
     }
 
     public function up() {
-        $table_name = 'Users';
+        $table_name = 'Tokens';
         $sql = 'CREATE TABLE `' . $table_name . '` (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(64) NOT NULL,
-            password_hash VARCHAR(128) NOT NULL,
-            faculty_number VARCHAR(16) NOT NULL,
+            token VARCHAR(128) NOT NULL,
+            expires TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            user_id INT,
+            INDEX u_id (user_id),
+            FOREIGN KEY (user_id)
+                REFERENCES Users(id)
+                ON DELETE CASCADE
         )';
         try {
             $connection = $this->connection();
@@ -30,7 +34,7 @@ class CreateUserTable {
     }
 
     public function down() {
-        $table_name = 'Users';
+        $table_name = 'Tokens';
         $sql = 'DROP TABLE IF EXISTS `' . $table_name . '`';
 
         try {
