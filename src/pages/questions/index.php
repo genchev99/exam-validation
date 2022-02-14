@@ -12,7 +12,7 @@ if (!isset($_COOKIE['token'])) {
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Home Page</title>
+    <title>Въпроси</title>
 
     <script defer src="./script.js"></script>
     <link href="style.css" rel="stylesheet" type="text/css">
@@ -21,16 +21,16 @@ if (!isset($_COOKIE['token'])) {
 <body class="loggedin">
 <nav class="navtop">
     <div>
-        <h1>Website Title</h1>
-        <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
-        <a href="../../logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+        <h1>Puffin Въпросник</h1>
+        <a href="profile.php"><i class="fas fa-user-circle"></i>Моят профил</a>
+        <a href="../../logout.php"><i class="fas fa-sign-out-alt"></i>Изход</a>
     </div>
 </nav>
 <div class="content">
-    <h2>My Questions</h2>
+    <h2>Мойте въпроси</h2>
     <div id="root" class="generator">
         <div class="group">
-            <button class="btn-info" onclick="addQuestion()">Add Question</button>
+            <button class="btn-info" onclick="addQuestion()">Добавяне на въпрос</button>
             <ol id="questions"></ol>
         </div>
     </div>
