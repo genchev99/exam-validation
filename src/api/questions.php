@@ -16,11 +16,11 @@ header('Content-Type: application/json');
 function handle() {
     header('Content-Type: application/json');
     $req_url = $_SERVER['REQUEST_URI'];
+    $user_id = $_SESSION['user_id'];
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        // TODO only get the questions owned by the user
         $question_model = new QuestionModel();
-        echo json_encode(["success" => true, "data" => $question_model->select()], JSON_UNESCAPED_UNICODE);
+        echo json_encode(["success" => true, "data" => $question_model->select_by_user_id($user_id)], JSON_UNESCAPED_UNICODE);
         return;
     }
 
@@ -36,7 +36,9 @@ function handle() {
         $question_id = $body['questionId'];
         $new_value = $body['newValue'];
 
-        // TODO: add validation if the auth user is the owner of the question
+        if (!$question_model->is_owner($user_id, $question_id)) {
+            die(403);
+        }
 
         if (!in_array($property, array('question', 'purpose_of_question', 'response_on_incorrect', 'response_on_correct', 'note'))) {
             die(400);
@@ -56,7 +58,9 @@ function handle() {
 
         $question_id = $body['questionId'];
 
-        // TODO: add validation if the auth user is the owner of the question
+        if (!$question_model->is_owner($user_id, $question_id)) {
+            die(403);
+        }
 
         $question_model->delete($question_id);
         echo json_encode(["success" => true]);
@@ -67,11 +71,8 @@ function handle() {
          * Creates an empty question in the database
          */
         $question_model = new QuestionModel();
-        $body = json_decode(file_get_contents('php://input'), true);
 
-        // TODO: check if the use has other empty questions
-
-        $question_model->create_empty();
+        $question_model->create_empty($user_id);
         echo json_encode(["success" => true]);
     }
 }

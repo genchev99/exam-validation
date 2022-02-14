@@ -195,7 +195,7 @@ function render() {
       const answer_input = document.createElement("textarea")
       answer_input.onchange = (event) => handleAnswerChange(event, question.id, option.id)
       answer_input.type = "text"
-      answer_input.placeholder = "Answer text"
+      answer_input.placeholder = "Отоговор"
       answer_input.value = option.opt
 
       const remove_answer_btn = document.createElement("button")
@@ -230,10 +230,10 @@ function render() {
     question_meta_div.append(question_meta_title)
 
     question_meta_div.append(
-      createInputGroupMeta("Purpose Of Question", question, "purpose_of_question"),
-      createInputGroupMeta("Response On Correct Answer", question, "response_on_correct"),
-      createInputGroupMeta("Response On Incorrect Answer", question, "response_on_incorrect"),
-      createInputGroupMeta("Note", question, "note"),
+      createInputGroupMeta("Цел на въпроса", question, "purpose_of_question"),
+      createInputGroupMeta("Обратна връзка при верен отговор", question, "response_on_correct"),
+      createInputGroupMeta("Обратна връзка при грешен отговор", question, "response_on_incorrect"),
+      createInputGroupMeta("Забележка", question, "note"),
     )
 
     li.append(

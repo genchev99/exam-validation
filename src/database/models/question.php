@@ -47,7 +47,7 @@ class QuestionModel extends PDOStatement {
         return $question;
     }
 
-    public function create_empty() {
+    public function create_empty($user_id) {
         $sql = "INSERT INTO Questions (question, purpose_of_question, hardness, response_on_correct, response_on_incorrect, note, type, user_id)
         VALUES
         ('','',1,'Верен отговор!','Грешен отговор!','',1,:user_id)";
@@ -55,7 +55,7 @@ class QuestionModel extends PDOStatement {
         try {
             $connection = $this->connection();
             $statement = $connection->prepare($sql);
-            $statement->bindValue(':user_id', 1);
+            $statement->bindValue(':user_id', $user_id);
             $statement->execute();
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -63,12 +63,33 @@ class QuestionModel extends PDOStatement {
         }
     }
 
-    public function select($as_json = true, $join_options = true) {
-        $sql = "SELECT * FROM " . $this->table_name;
+    public function is_owner($user_id, $question_id): bool {
+        $sql = "SELECT * FROM Questions WHERE user_id=:user_id AND id=:question_id";
 
         try {
             $connection = $this->connection();
-            $statement = $connection->query($sql);
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':user_id', $user_id);
+            $statement->bindValue(':question_id', $question_id);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $connection = null;
+
+            return !empty($result);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function select_by_user_id($user_id, $as_json = true, $join_options = true) {
+        $sql = "SELECT * FROM Questions WHERE user_id=:user_id";
+
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':user_id', $user_id);
+            $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
             $connection = null;
 
