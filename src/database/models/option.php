@@ -29,6 +29,36 @@ class OptionModel extends PDOStatement {
         return $record;
     }
 
+    public function create_empty($question_id) {
+        $sql = "INSERT INTO Options (opt, question_id)
+        VALUES
+        ('', :question_id)";
+
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':question_id', $question_id);
+            $statement->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function delete($option_id) {
+        $sql = "DELETE FROM Options WHERE id=:option_id";
+
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':option_id', $option_id);
+            $statement->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function update_option($option_id, $new_option) {
         $sql = "UPDATE Options SET opt=:value, updated_at=NOW() WHERE id=:option_id";
 

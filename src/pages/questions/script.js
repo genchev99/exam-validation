@@ -66,6 +66,30 @@ async function sendPut(url, body) {
   });
 }
 
+async function sendDelete(url, body) {
+  return await fetch(url, {
+    method: 'DELETE',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(body) // body data type must match "Content-Type" header
+  });
+}
+
+async function sendPost(url, body) {
+  return await fetch(url, {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(body) // body data type must match "Content-Type" header
+  });
+}
+
 async function updateQuestionRecord(questionId, newQuestion) {
   const url = '/api/questions.php'
 
@@ -225,43 +249,58 @@ function render() {
   }
 }
 
-function addQuestion() {
-  // questions.push({
-  //   id: fq.id,
-  //   question: fq.question,
-  //   purposeOfQuestion: fq.purpose_of_question,
-  //   answers: [],
-  //   correctAnswer: null,
-  //   hardness: fq.hardness,
-  //   responseOnCorrect: fq.response_on_correct,
-  //   responseOnIncorrect: fq.response_on_incorrect,
-  //   note: fq.note,
-  //   type: fq.type,
-  // })
+async function createQuestionRecord() {
+  const url = '/api/questions.php'
 
-  render()
+  const response = await sendPost(url, {})
+
+  const as_json = await response.text()
+  console.log(as_json)
+}
+
+function addQuestion() {
+  createQuestionRecord().then(() => loadQuestions())
+}
+
+async function deleteQuestionRecord(questionId) {
+  const url = '/api/questions.php'
+
+  const response = await sendDelete(url, {
+    questionId,
+  })
+
+  const as_json = await response.text()
+  console.log(as_json)
 }
 
 function removeQuestion(questionId) {
-  questions = questions.filter(question => question.id !== questionId)
+  deleteQuestionRecord(questionId).then(() => loadQuestions())
+}
 
-  render()
+async function createOptionRecord(questionId) {
+  const url = '/api/options.php'
+
+  const response = await sendPost(url, {questionId})
+
+  const as_json = await response.text()
+  console.log(as_json)
 }
 
 function addAnswer(questionId) {
-  const question = questions.find(question => question.id === questionId)
+  createOptionRecord(questionId).then(() => loadQuestions())
+}
 
-  question.options.push({
-    id: randomId(),
-    opt: '',
+async function deleteOptionRecord(optionId) {
+  const url = '/api/options.php'
+
+  const response = await sendDelete(url, {
+    optionId,
   })
 
-  render()
+  const as_json = await response.text()
+  console.log(as_json)
 }
 
 function removeAnswer(questionId, answerId) {
-  const question = questions.find(question => question.id === questionId)
-  question.options = question.options.filter(answer => answer.id !== answerId)
-
-  render()
+  deleteOptionRecord(answerId).then(() => loadQuestions())
 }

@@ -47,6 +47,22 @@ class QuestionModel extends PDOStatement {
         return $question;
     }
 
+    public function create_empty() {
+        $sql = "INSERT INTO Questions (question, purpose_of_question, hardness, response_on_correct, response_on_incorrect, note, type, user_id)
+        VALUES
+        ('','',1,'Верен отговор!','Грешен отговор!','',1,:user_id)";
+
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':user_id', 1);
+            $statement->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function select($as_json = true, $join_options = true) {
         $sql = "SELECT * FROM " . $this->table_name;
 
@@ -65,6 +81,20 @@ class QuestionModel extends PDOStatement {
             }
 
             return array_map('self::from_dict', $result);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function delete($question_id) {
+        $sql = "DELETE FROM Questions WHERE id=:question_id";
+
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':question_id', $question_id);
+            $statement->execute();
         } catch (PDOException $e) {
             echo $e->getMessage();
             return false;

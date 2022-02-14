@@ -45,6 +45,35 @@ function handle() {
         $question_model->update_column($question_id, $property, $new_value);
         echo json_encode(["success" => true]);
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        $question_model = new QuestionModel();
+        $body = json_decode(file_get_contents('php://input'), true);
+
+        if (!isset($body['questionId'])) {
+            die(400);
+        }
+
+        $question_id = $body['questionId'];
+
+        // TODO: add validation if the auth user is the owner of the question
+
+        $question_model->delete($question_id);
+        echo json_encode(["success" => true]);
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        /**
+         * Creates an empty question in the database
+         */
+        $question_model = new QuestionModel();
+        $body = json_decode(file_get_contents('php://input'), true);
+
+        // TODO: check if the use has other empty questions
+
+        $question_model->create_empty();
+        echo json_encode(["success" => true]);
+    }
 }
 
 handle();
