@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../database/models/option.php";
+require_once __DIR__ . "/../database/models/question.php";
 require_once __DIR__ . "/../database/models/token.php";
 require_once __DIR__ . "/../utils.php";
 
@@ -15,19 +16,24 @@ header('Content-Type: application/json');
 
 function handle() {
     header('Content-Type: application/json');
+    $user_id = $_SESSION['user_id'];
 
     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         $option_model = new OptionModel();
         $body = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($body['optionId']) or !isset($body['newValue'])) {
+            http_response_code(400);
             die(400);
         }
 
-        // TODO check if the user owns the question
-        $question_id = $body['questionId'];
         $option_id = $body['optionId'];
         $new_value = $body['newValue'];
+
+        if (!$option_model->is_owner($user_id, $option_id)) {
+            http_response_code(403);
+            die(403);
+        }
 
         $option_model->update_option($option_id, $new_value);
         echo json_encode(["success" => true]);
@@ -38,11 +44,15 @@ function handle() {
         $body = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($body['optionId'])) {
+            http_response_code(400);
             die(400);
         }
 
-        // TODO check if the user owns the question
         $option_id = $body['optionId'];
+        if (!$option_model->is_owner($user_id, $option_id)) {
+            http_response_code(403);
+            die(403);
+        }
 
         $option_model->delete($option_id);
         echo json_encode(["success" => true]);
@@ -50,14 +60,20 @@ function handle() {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $option_model = new OptionModel();
+        $question_model = new QuestionModel();
         $body = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($body['questionId'])) {
+            http_response_code(400);
             die(400);
         }
 
-        // TODO check if the user owns the question
         $question_id = $body['questionId'];
+
+        if (!$question_model->is_owner($user_id, $question_id)) {
+            http_response_code(403);
+            die(403);
+        }
 
         $option_model->create_empty($question_id);
         echo json_encode(["success" => true]);

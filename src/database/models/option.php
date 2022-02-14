@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../config.php');
+require_once(__DIR__ . '/question.php');
 
 class OptionModel extends PDOStatement {
     private $connection;
@@ -94,5 +95,40 @@ class OptionModel extends PDOStatement {
             echo $e->getMessage();
             return false;
         }
+    }
+
+    public function select_by_id($option_id, $as_json = true) {
+        $sql = "SELECT * FROM Options WHERE id=:option_id";
+
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':option_id', $option_id);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $connection = null;
+
+            if ($as_json) {
+                return $result;
+            }
+
+            return array_map('self::from_dict', $result);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function is_owner($user_id, $option_id): bool {
+        $options = $this->select_by_id($option_id);
+
+        if (empty($questions)) {
+            return true;
+        }
+
+        $option = $options[0];
+        $question_model = new QuestionModel();
+
+        return $question_model->is_owner($user_id, $option['question_id']);
     }
 }

@@ -29,6 +29,7 @@ function handle() {
         $body = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($body['property'])) {
+            http_response_code(400);
             die(400);
         }
 
@@ -37,10 +38,12 @@ function handle() {
         $new_value = $body['newValue'];
 
         if (!$question_model->is_owner($user_id, $question_id)) {
+            http_response_code(403);
             die(403);
         }
 
         if (!in_array($property, array('question', 'purpose_of_question', 'response_on_incorrect', 'response_on_correct', 'note'))) {
+            http_response_code(400);
             die(400);
         }
 
@@ -53,12 +56,14 @@ function handle() {
         $body = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($body['questionId'])) {
+            http_response_code(400);
             die(400);
         }
 
         $question_id = $body['questionId'];
 
         if (!$question_model->is_owner($user_id, $question_id)) {
+            http_response_code(400);
             die(403);
         }
 
