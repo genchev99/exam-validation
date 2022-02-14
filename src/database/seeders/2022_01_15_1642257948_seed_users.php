@@ -13,7 +13,8 @@ class SeedUsers {
             password_hash,
             faculty_number
         ) VALUES
-        ('test', '098f6bcd4621d373cade4e832627b4f6', '88888')
+        ('test', '098f6bcd4621d373cade4e832627b4f6', '88888'),
+        ('test2', '098f6bcd4621d373cade4e832627b4f6', '99999')
         ";
         try {
             $connection = $this->connection();
