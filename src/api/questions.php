@@ -18,6 +18,7 @@ function handle() {
     $req_url = $_SERVER['REQUEST_URI'];
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // TODO only get the questions owned by the user
         $question_model = new QuestionModel();
         echo json_encode(["success" => true, "data" => $question_model->select()], JSON_UNESCAPED_UNICODE);
         return;
@@ -42,6 +43,7 @@ function handle() {
         }
 
         $question_model->update_column($question_id, $property, $new_value);
+        echo json_encode(["success" => true]);
     }
 }
 

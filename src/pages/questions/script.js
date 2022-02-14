@@ -87,11 +87,26 @@ function handleQuestionChange(event, questionId) {
   updateQuestionRecord(questionId, newQuestion)
 }
 
+async function updateOptionRecord(questionId, optionId, newValue) {
+  const url = '/api/options.php'
+
+  const response = await sendPut(url, {
+    questionId,
+    optionId,
+    newValue,
+  })
+
+  const as_json = await response.text()
+  console.log(as_json)
+}
+
 function handleAnswerChange(event, questionId, answerId) {
   const question = questions.find(question => question.id === questionId)
   const answer = question.options.find(answer => answer.id === answerId)
+  const newValue = event.target.value
 
-  answer.opt = event.target.value
+  answer.opt = newValue
+  updateOptionRecord(question.id, answer.id, newValue)
 }
 
 async function updateMetaRecord(questionId, newValue, property) {

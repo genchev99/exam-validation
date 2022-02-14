@@ -29,7 +29,22 @@ class OptionModel extends PDOStatement {
         return $record;
     }
 
-    public function select_by_question_id($question_id, $as_json=true) {
+    public function update_option($option_id, $new_option) {
+        $sql = "UPDATE Options SET opt=:value, updated_at=NOW() WHERE id=:option_id";
+
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':option_id', $option_id);
+            $statement->bindValue(':value', $new_option);
+            $statement->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function select_by_question_id($question_id, $as_json = true) {
         $sql = "SELECT * FROM " . $this->table_name . " WHERE question_id=:question_id";
 
         try {
