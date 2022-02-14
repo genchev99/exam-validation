@@ -12,20 +12,17 @@ if (!isset($_COOKIE['token'])) {
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Въпроси</title>
+    <title>Моите Въпроси</title>
 
     <script defer src="./script.js"></script>
     <link href="style.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <link href="../global_style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css">
 </head>
 <body class="loggedin">
-<nav class="navtop">
-    <div>
-        <h1>Puffin Въпросник</h1>
-        <a href="profile.php"><i class="fas fa-user-circle"></i>Моят профил</a>
-        <a href="../../logout.php"><i class="fas fa-sign-out-alt"></i>Изход</a>
-    </div>
-</nav>
+
+<?php include('../navigation.php'); ?>
+
 <div class="content">
     <h2>Мойте въпроси</h2>
     <div id="root" class="generator">
