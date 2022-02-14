@@ -47,7 +47,7 @@ class QuestionModel extends PDOStatement {
         return $question;
     }
 
-    public function select($as_json=true, $join_options=true) {
+    public function select($as_json = true, $join_options = true) {
         $sql = "SELECT * FROM " . $this->table_name;
 
         try {
@@ -65,6 +65,21 @@ class QuestionModel extends PDOStatement {
             }
 
             return array_map('self::from_dict', $result);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function update_column($question_id, $column, $value) {
+        $sql = "UPDATE Questions SET " . $column . "=:value, updated_at=NOW() WHERE id=:question_id";
+
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':question_id', $question_id);
+            $statement->bindValue(':value', $value);
+            $statement->execute();
         } catch (PDOException $e) {
             echo $e->getMessage();
             return false;

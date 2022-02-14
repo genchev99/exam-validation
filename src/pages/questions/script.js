@@ -16,12 +16,12 @@ async function loadQuestions() {
   questions = fetchedQuestions.map(fq => ({
     id: fq.id,
     question: fq.question,
-    purposeOfQuestion: fq.purpose_of_question,
+    purpose_of_question: fq.purpose_of_question,
     options: fq.options,
     correctAnswer: null,
     hardness: fq.hardness,
-    responseOnCorrect: fq.response_on_correct,
-    responseOnIncorrect: fq.response_on_incorrect,
+    response_on_correct: fq.response_on_correct,
+    response_on_incorrect: fq.response_on_incorrect,
     note: fq.note,
     type: fq.type,
   }))
@@ -54,31 +54,37 @@ function createInputGroupMeta(placeholder, question, metaName) {
   return input_grp_div
 }
 
-function sendRequest(url, options, successCallback, errorCallback) {
-  const request = new XMLHttpRequest();
-
-  request.addEventListener('load', function () {
-    console.log(request.responseText)
-    const response = JSON.parse(request.responseText);
-
-    if (request.status === 200) {
-      successCallback(response);
-    } else {
-      errorCallback(response);
-    }
+async function sendPut(url, body) {
+  return await fetch(url, {
+    method: 'PUT',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(body) // body data type must match "Content-Type" header
   });
+}
 
-  request.open(options.method, url, true);
-  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  request.send(options.data);
+async function updateQuestionRecord(questionId, newQuestion) {
+  const url = '/api/questions.php'
+
+  const response = await sendPut(url, {
+    questionId,
+    newValue: newQuestion,
+    property: 'question',
+  })
+
+  const as_json = await response.text()
+  console.log(as_json)
 }
 
 function handleQuestionChange(event, questionId) {
   const question = questions.find(question => question.id === questionId)
-  question.question = event.target.value
-  console.log(event.target.value)
+  const newQuestion = event.target.value
+  question.question = newQuestion
 
-  sendRequest('/api/questions.php/update', 'POST', `data=${JSON.stringify({test: 1})}`, console.log, console.error);
+  updateQuestionRecord(questionId, newQuestion)
 }
 
 function handleAnswerChange(event, questionId, answerId) {
@@ -88,9 +94,25 @@ function handleAnswerChange(event, questionId, answerId) {
   answer.opt = event.target.value
 }
 
+async function updateMetaRecord(questionId, newValue, property) {
+  const url = '/api/questions.php'
+
+  const response = await sendPut(url, {
+    questionId,
+    newValue,
+    property,
+  })
+
+  const as_json = await response.text()
+  console.log(as_json)
+}
+
 function handleMetaChange(event, questionId, metaName) {
   const question = questions.find(question => question.id === questionId)
-  question[metaName] = event.target.value
+  const newValue = event.target.value
+  question[metaName] = newValue
+
+  updateMetaRecord(questionId, newValue, metaName)
 }
 
 function render() {
@@ -169,9 +191,9 @@ function render() {
     question_meta_div.append(question_meta_title)
 
     question_meta_div.append(
-      createInputGroupMeta("Purpose Of Question", question, "purposeOfQuestion"),
-      createInputGroupMeta("Response On Correct Answer", question, "responseOnCorrect"),
-      createInputGroupMeta("Response On Incorrect Answer", question, "responseOnIncorrect"),
+      createInputGroupMeta("Purpose Of Question", question, "purpose_of_question"),
+      createInputGroupMeta("Response On Correct Answer", question, "response_on_correct"),
+      createInputGroupMeta("Response On Incorrect Answer", question, "response_on_incorrect"),
       createInputGroupMeta("Note", question, "note"),
     )
 

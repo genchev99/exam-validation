@@ -23,13 +23,25 @@ function handle() {
         return;
     }
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (preg_match("/update$/", $req_url)) {
-            $question_model = new QuestionModel();
-//            echo json_encode(json_decode($_POST['data'], true));
-            echo $_POST['data'];
-            return;
+    if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+        $question_model = new QuestionModel();
+        $body = json_decode(file_get_contents('php://input'), true);
+
+        if (!isset($body['property'])) {
+            die(400);
         }
+
+        $property = $body['property'];
+        $question_id = $body['questionId'];
+        $new_value = $body['newValue'];
+
+        // TODO: add validation if the auth user is the owner of the question
+
+        if (!in_array($property, array('question', 'purpose_of_question', 'response_on_incorrect', 'response_on_correct', 'note'))) {
+            die(400);
+        }
+
+        $question_model->update_column($question_id, $property, $new_value);
     }
 }
 
