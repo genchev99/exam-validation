@@ -24,7 +24,7 @@ function handle()
       echo json_encode(["success" => true, "data" => $comment_model->select_all()], JSON_UNESCAPED_UNICODE);
       return;
     }
-
+    $question_id = $_GET['question_id'];
     echo json_encode(["success" => true, "data" => $comment_model->select_by_question_id($question_id)], JSON_UNESCAPED_UNICODE);
     return;
   }
