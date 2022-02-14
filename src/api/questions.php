@@ -5,18 +5,20 @@ require_once __DIR__ . "/../utils.php";
 
 session_start();
 
-//$token_model = new TokenModel();
-//if (!isset($_COOKIE['token']) or !$token_model->is_authorized($_COOKIE['token'])) {
-//    http_response_code(401);
-//    exit("Unauthorized");
-//}
-
 header('Content-Type: application/json');
 
 function handle() {
-    header('Content-Type: application/json');
-    $req_url = $_SERVER['REQUEST_URI'];
     $user_id = $_SESSION['user_id'];
+    $token_model = new TokenModel();
+    /*
+     * Checks if the use is authorized
+     * */
+    if (!isset($_COOKIE['token']) or !$token_model->is_authorized($_COOKIE['token'], $user_id)) {
+        http_response_code(401);
+        exit("Unauthorized");
+    }
+
+    header('Content-Type: application/json');
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $question_model = new QuestionModel();

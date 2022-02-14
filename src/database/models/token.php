@@ -5,6 +5,7 @@ class TokenModel extends PDOStatement {
 
     public $id;
     public $token;
+    public $expires_at;
     public $created_at;
     public $updated_at;
 
@@ -19,6 +20,7 @@ class TokenModel extends PDOStatement {
         $record = new self();
         $record->id = $dict['id'];
         $record->token = $dict['token'];
+        $record->expires_at = $dict['expires_at'];
         $record->created_at = $dict['created_at'];
         $record->updated_at = $dict['updated_at'];
 
@@ -45,13 +47,14 @@ class TokenModel extends PDOStatement {
         }
     }
 
-    public function select_by_token($token) {
-        $sql = "SELECT * FROM Tokens WHERE token=:token";
+    public function select_by_token_and_user($token, $user_id) {
+        $sql = "SELECT * FROM Tokens WHERE token=:token AND user_id=:user_id";
 
         try {
             $connection = $this->connection();
             $statement = $connection->prepare($sql);
             $statement->bindValue(':token', $token);
+            $statement->bindValue(':user_id', $user_id);
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
             $connection = null;
@@ -65,14 +68,14 @@ class TokenModel extends PDOStatement {
     /**
      * Check whether the token is valid
      */
-    public function is_authorized($token): bool {
-        $tokens = $this->select_by_token($token);
+    public function is_authorized($token, $user_id): bool {
+        $tokens = $this->select_by_token_and_user($token, $user_id);
 
         if (empty($tokens)) {
             return false;
         }
 
-        if (new DateTime($tokens[0]->expires_at) > new DateTime()) {
+        if (new DateTime($tokens[0]->expires_at) < new DateTime()) {
             return false;
         }
 
