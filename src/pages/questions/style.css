@@ -54,9 +54,9 @@ button.btn-danger {
 	width: 3em;
 	font-size: 1em;
 	font-weight: bold;
-	-moz-box-shadow:    inset 0 0 2px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
 	-webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
-	box-shadow:         inset 0 0 2px rgba(0, 0, 0, 0.3);
+	box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
 button.btn-danger.option {
@@ -270,6 +270,7 @@ input[type="checkbox"] {
 	opacity: 0;
 	z-index: -1;
 }
+
 .check-trail {
 	display: flex;
 	align-items: center;
@@ -282,6 +283,7 @@ input[type="checkbox"] {
 	transition: all 0.5s ease;
 	cursor: pointer;
 }
+
 .check-handler {
 	display: flex;
 	margin-left: 0.5em;
@@ -294,19 +296,23 @@ input[type="checkbox"] {
 	transition: all 0.5s ease;
 	box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
+
 .check-handler:before {
 	content: "\00D7";
 	color: white;
 	font-size: 1em;
 	font-weight: bold;
 }
+
 input[type="checkbox"]:checked + .check-trail {
 	background: #16a085;
 }
+
 input[type="checkbox"]:checked + .check-trail .check-handler {
 	margin-left: 50%;
 	background: #1abc9c;
 }
+
 input[type="checkbox"]:checked + .check-trail .check-handler::before {
 	content: "\2714";
 }
