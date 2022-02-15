@@ -1,215 +1,3 @@
-// // // https://css-tricks.com/how-to-create-actions-for-selected-text-with-the-selection-api/
-// // let control = null
-
-// // window.addEventListener('DOMContentLoaded', (event) => {
-// //   console.log('DOM fully loaded and parsed')
-
-// //   control = document.importNode(document.querySelector('div.template'), true)
-// //   console.log(control.childNodes)
-
-// //   control.style.display = 'block'
-
-
-// //   for (const button of control.querySelectorAll('button')) {
-// //     console.log(button)
-// //     button.addEventListener('onpointerdown', on_control_down, true)
-
-// //   }
-
-// //   for (const el of document.querySelectorAll('p.editable')) {
-// //     el.onpointerup = on_selection
-// //   }
-
-// //   document.onpointerdown = on_pointer_down
-// // })
-
-// // function on_control_down(event) {
-// //   console.log('on control down')
-// //   this.remove();
-// //   document.getSelection().removeAllRanges();
-// //   event.stopPropagation()
-// // }
-
-// // function on_pointer_down() {
-//   // const start = document.getSelection().anchorOffset
-//   // const end = document.getSelection().focusOffset
-// //   document.getElementById("editable").innerHTML = replaceBetween(document.getElementById("editable").innerHTML, start, end, 
-// //   strikeThrough(document.getElementById("editable").innerHTML.substring(start, end)))
-
-// //   console.log(`start ${start} end: ${end}`)
-// //   console.log('pointers')
-
-// //   if (!control) {
-// //     return
-// //   }
-
-// //   control.remove();
-// //   document.getSelection().removeAllRanges();
-// // }
-
-// // function on_selection() {
-// //   const selection = document.getSelection()
-// //   const selectedText = selection.toString()
-
-// //   if (!selectedText) {
-// //     return
-// //   }
-
-// //   const {top, left, width} = selection.getRangeAt(0).getBoundingClientRect();
-
-// //   control.style.top = `calc(${top}px - 48px)`;
-// //   control.style.left = `calc(${left}px + calc(${width}px / 2) - 40px)`;
-// //   control['selectedText'] = selectedText;
-
-// //   document.body.appendChild(control);
-// // }
-
-// function strikeThrough(text) {
-//   return text
-//     .split('')
-//     .map(char => char + '\u0336')
-//     .join('')
-// }
-
-// function removeStrikeThrough(text) {
-//   console.log(text)
-//   const a = text.replace(/[\u0336]/g, '')
-//   return a
-// }
-
-// function countStrikedLetters(text, end) {
-//   console.log("end" ,end)
-//   let index = 0
-//   let counter = 0
-//   text.split("").map((letter) => {
-//     if (letter === '\u0336') {
-//       counter++
-//     } 
-//   })
-//   return counter
-// }
-
-// function replaceBetween(origin, startIndex, endIndex, insertion) {
-//   return origin.substring(0, startIndex) + insertion + origin.substring(endIndex);
-// }
-
-// function insertAt(origin, index, insertion) {
-//   console.log(origin)
-//   console.log("inser at", index)
-//   return origin.substring(0, index) + insertion + origin.substring(index)
-// }
-
-// window.addEventListener('DOMContentLoaded', (event) => {
-// var start, end;
-// var el;
-// let commentsCount = 1;
-// var control = document.importNode(document.querySelector('template').content, true).childNodes[0];
-// // var test = document.getElementsByClassName('question')[0]
-// // test.addEventListener('pointerdown', oncontroldown, true);
-// document.getElementById('submit-comment').onclick = (event) => {
-//   const el = document.getElementById('card')
-//   const comment = document.createElement('p')
-//   comment.className = 'comment'
-//   const inputBox = document.getElementById('comment-input')
-//   const text = document.createTextNode(`Коментар ${commentsCount}: ${inputBox.value}`)
-//   comment.appendChild(text)
-//   el.appendChild(comment)
-//   document.getElementById('myPopup').style.visibility = 'hidden'
-//   inputBox.value = ''
-//   commentsCount++;
-// }
-
-// document.getElementById('submit-edit').onclick = (event) => {
-//   const inputBox = document.getElementById('edit-input')
-//   el.innerHTML = insertAt(el.innerHTML, end + countStrikedLetters(el.innerHTML, end) , inputBox.value)
-//   console.log(start, end)
-//   inputBox.value = ''
-//   document.getElementById('edit-popup').style.visibility = 'hidden'
-// }
-
-// document.getElementById('cancel-comment').onclick = (event) => {
-//   document.getElementById('myPopup').style.visibility = 'hidden'
-//   document.getElementById('comment-input').value = ''
-// }
-
-// document.getElementById('cancel-edit').onclick = (event) => {
-//   console.log(start,end)
-//   if (start > end) {
-//     let temp = start;
-//     start = end;
-//     end = temp;
-//   }
-//   el.innerHTML = replaceBetween(el.innerHTML, start, end * 2, removeStrikeThrough(el.innerHTML.substring(start, end * 2)))
-//   document.getElementById('edit-popup').style.visibility = 'hidden'
-//   document.getElementById('edit-input').value = ''
-// }
-
-// control.addEventListener('pointerdown', oncontroldown, true);
-// document.querySelector('p').onpointerup = () => {
-//   let selection = document.getSelection(), text = selection.toString();
-//   if (text !== "") {
-//     let rect = selection.getRangeAt(0).getBoundingClientRect();
-//     control.style.top = `calc(${rect.top}px - 48px)`;
-//     control.style.left = `calc(${rect.left}px + calc(${rect.width}px / 2) - 40px)`;
-//     control['text']= text; 
-//     document.body.appendChild(control);
-//   }
-// }
-// function oncontroldown(event) {
-//   const clickedElementId = event.path[0].id
-//   start = document.getSelection().anchorOffset
-//   end = document.getSelection().focusOffset
-//   console.log(start, end)
-//   if (start > end) {
-//     let temp = start;
-//     start = end;
-//     end = temp;
-//   }
-
-//   if (clickedElementId === 'edit') {
-//     el = document.getSelection().getRangeAt(0).startContainer.parentElement
-//     el.innerHTML = replaceBetween(el.innerHTML, start, end, strikeThrough(el.innerHTML.substring(start, end)))
-//     document.getElementById('myPopup').style.visibility = 'hidden'
-//     document.getElementById('edit-popup').style.visibility = 'visible'
-//   } else {
-//     document.getElementById('edit-popup').style.visibility = 'hidden'
-//     document.getElementById('myPopup').style.visibility = 'visible'
-//   }
-
-//   console.log(document.getSelection());
-//   this.remove();
-//   document.getSelection().removeAllRanges();
-//   event.stopPropagation();
-// }
-// document.onpointerdown = ()=>{  
-//   let control = document.querySelector('#control');
-//   if (control !== null) {control.remove();document.getSelection().removeAllRanges();}
-// }
-
-// for (const el of document.querySelectorAll('p.editable')) {
-//   el.onpointerup = on_selection
-// }
-
-// function on_selection() {
-//   const selection = document.getSelection()
-//   const selectedText = selection.toString()
-
-//   if (!selectedText) {
-//     return
-//   }
-
-//   const {top, left, width} = selection.getRangeAt(0).getBoundingClientRect();
-
-//   control.style.top = `calc(${top}px - 48px)`;
-//   control.style.left = `calc(${left}px + calc(${width}px / 2) - 40px)`;
-//   control['selectedText'] = selectedText;
-
-//   document.body.appendChild(control);
-// }
-// })
-
-
-
 async function getQuestions() {
   const response = await fetch('/api/questions.php')
   const {success, data} = await response.json()
@@ -232,7 +20,7 @@ async function getComments(question_id) {
   return data
 }
 
-async function getAllComments(question_id) {
+async function getAllComments() {
   const response = await fetch('/api/comments.php?')
   const {success, data} = await response.json()
 
@@ -257,11 +45,7 @@ async function sendPost(url, body) {
 
 async function createCommentRecord(comment, questionId) {
   const url = '/api/comments.php'
-  console.log(questionId)
-  const response = await sendPost(url, {comment, questionId })
-
-  const as_json = await response.text()
-  console.log(as_json)
+  await sendPost(url, {comment, questionId })
 }
 
 function render() {
@@ -336,8 +120,8 @@ function render() {
     add_comment_button.onclick = (event) => {
       li.append(createCommentArea('Коментар', question, 'test'))
       event.target.parentNode.removeChild(event.target);
-      // document.getElementById('add_comment_button').remove()
     }
+
     currentQuestionComments = comments.filter(comment => comment.questionId === question.id)
     const commentsList = document.createElement('ul')
     for (const fetchedComment of currentQuestionComments) {
@@ -345,10 +129,12 @@ function render() {
       const comment = document.createElement('li')
       comment.innerHTML = fetchedComment.comment
       comment.className = 'comment-item'
+
+      const name = document.createElement('span')
+      name.innerHTML = `${fetchedComment.username}, ${fetchedComment.fn}`
+      commentsList.appendChild(name)
       commentsList.appendChild(comment)
     }
-   
-
 
     li.append(
       question_input_grp_div,
@@ -364,7 +150,6 @@ function render() {
     )
   }
 }
-
 
 async function loadQuestions() {
   const fetchedQuestions = await getQuestions()
@@ -385,7 +170,9 @@ async function loadQuestions() {
     id: comment.id,
     comment: comment.comment,
     questionId: comment.question_id,
-    user_id: comment.user_id
+    userId: comment.user_id,
+    username: comment.username,
+    fn: comment.faculty_number
   }))
   render()
 }

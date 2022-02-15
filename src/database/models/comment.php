@@ -83,10 +83,9 @@ class CommentModel extends PDOStatement
     }
   }
 
-
   public function select_all($as_json = true)
   {
-    $sql = "SELECT * FROM Comments";
+    $sql = "SELECT Comments.id, Comments.comment, Comments.question_id, Users.faculty_number, Users.id, Users.username FROM Comments JOIN Users ON Comments.user_id=Users.id";
 
     try {
       $connection = $this->connection();
