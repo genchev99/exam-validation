@@ -49,8 +49,13 @@ async function createCommentRecord(comment, questionId) {
 }
 
 function render() {
+  referats()
   const questions_ol = document.querySelector("ol#questions")
-  questions_ol.innerHTML = ""
+  if (!questions.length) {
+    questions_ol.innerHTML = 'Няма добавени въпроси за този реферат. Можеш да добавиш въпроси от "Моите въпроси"'
+  } else {
+    questions_ol.innerHTML = ""
+  }
 
   for (const question of questions) {
     const li = document.createElement("li")
@@ -222,4 +227,69 @@ function createCommentArea(text, question, metaName) {
   )
 
   return input_grp_div
+}
+
+async function setReferatSelection(referatId) {
+  const url = "/api/referats.php"
+
+  const response = await sendPut(url, {
+    referatId,
+  })
+
+  const as_json = await response.text()
+  console.log(as_json)
+}
+
+function handleReferatPick(event) {
+  setReferatSelection(event.target.selectedOptions[0].getAttribute("referat-id"))
+    .then(() => loadReferats)
+    .then(() => loadQuestions())
+}
+
+function referats()  {
+  const selectReferat = document.getElementById('referat')
+  selectReferat.onchange = (event) => handleReferatPick(event)
+
+  // Load referats
+  loadReferats(selectReferat)
+}
+
+async function loadReferats(selectHandle) {
+  const {data: referats, selected} = await getReferats()
+  selectHandle.innerHTML = ""
+
+  for (const referat of referats) {
+    const option = document.createElement("option")
+    option.textContent = referat.referat_title
+    option.id = `referat-${referat.id}`
+    option.setAttribute("referat-id", referat.id)
+
+    selectHandle.append(option)
+  }
+
+  selectHandle.selectedIndex = referats.map(referat => referat.id === selected).indexOf(true)
+}
+
+async function getReferats() {
+  const response = await fetch('/api/referats.php')
+  const {success, data, selected} = await response.json()
+
+  if (!success) {
+    alert("Error: There was a problem while fetching referats!");
+    throw new Error("referats")
+  }
+
+  return {data, selected}
+}
+
+async function sendPut(url, body) {
+  return await fetch(url, {
+    method: 'PUT',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(body) // body data type must match "Content-Type" header
+  });
 }
