@@ -13,12 +13,12 @@ if (!isset($_COOKIE['token'])) {
 
 <head>
   <meta charset="utf-8">
-  <title>Моите Въпроси</title>
-
+  <title>Профил</title>
   <script defer src="./script.js"></script>
   <link href="style.css" rel="stylesheet" type="text/css">
   <link href="../global_style.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body class="loggedin">
@@ -26,21 +26,13 @@ if (!isset($_COOKIE['token'])) {
   <?php include('../navigation.php'); ?>
 
   <div class="content">
-    <h2>Моите въпроси</h2>
-
-    <div id="referat-select">
-      <span class="custom-dropdown big">
-        <label for="referat">Избор на реферат</label>
-        <select id="referat">
-          <option>Зареждане...</option>
-        </select>
-      </span>
-    </div>
-
-    <div id="root" class="generator">
-      <div class="group">
-        <button class="btn-info" onclick="addQuestion()">Добавяне на въпрос</button>
-        <ol id="questions"></ol>
+    <h2>Профил</h2>
+    <div class="wrapper">
+      <div class="card">
+        <h1 id="name">Зареждане...</h1>
+        <p class="title" id="fn">Зареждане...</p>
+        <p>ФМИ, СУ Софийски Университет “Св. Климент Охридски”</p>
+        <p id="created-at">Зареждане...</p>
       </div>
     </div>
   </div>
