@@ -1,34 +1,18 @@
 <?php
 require_once(__DIR__ . '/../config.php');
 
-class CreateQuestionTable {
+class CreateReferatTable {
     private function connection() {
         return new PDOConfig();
     }
 
     public function up() {
-        $table_name = 'Questions';
+        $table_name = 'Referats';
         $sql = 'CREATE TABLE `' . $table_name . '` (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            purpose_of_question VARCHAR(1024) NOT NULL,
-            question VARCHAR(2048) NOT NULL,
-            hardness INT NOT NULL,
-            response_on_incorrect VARCHAR(1024) NOT NULL,
-            response_on_correct VARCHAR(1024) NOT NULL,
-            note VARCHAR(1024) NOT NULL,
-            type INT NOT NULL,
+            referat_title VARCHAR(1024) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            user_id INT,
-            INDEX u_id (user_id),
-            FOREIGN KEY (user_id)
-                REFERENCES Users(id)
-                ON DELETE CASCADE,
-            referat_id INT,
-            INDEX r_id (referat_id),
-            FOREIGN KEY (referat_id)
-                REFERENCES Referats(id)
-                ON DELETE CASCADE
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )';
         try {
             $connection = $this->connection();
@@ -44,7 +28,7 @@ class CreateQuestionTable {
     }
 
     public function down() {
-        $table_name = 'Questions';
+        $table_name = 'Referats';
         $sql = 'DROP TABLE IF EXISTS `' . $table_name . '`';
 
         try {

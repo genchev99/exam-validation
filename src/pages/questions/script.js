@@ -1,3 +1,39 @@
+(() => {
+  const selectReferat = document.querySelector("select#referat")
+  selectReferat.onchange = (event) => handleReferatPick(event)
+
+  // Load referats
+  loadReferats(selectReferat)
+})();
+
+async function loadReferats(selectHandle) {
+  const {data: referats, selected} = await getReferats()
+  selectHandle.innerHTML = ""
+
+  for (const referat of referats) {
+    const option = document.createElement("option")
+    option.textContent = referat.referat_title
+    option.id = `referat-${referat.id}`
+    option.setAttribute("referat-id", referat.id)
+
+    selectHandle.append(option)
+  }
+
+  selectHandle.selectedIndex = referats.map(referat => referat.id === selected).indexOf(true)
+}
+
+async function getReferats() {
+  const response = await fetch('/api/referats.php')
+  const {success, data, selected} = await response.json()
+
+  if (!success) {
+    alert("Error: There was a problem while fetching referats!");
+    throw new Error("referats")
+  }
+
+  return {data, selected}
+}
+
 let questions = []
 
 async function getQuestions() {
@@ -154,6 +190,22 @@ function handleMetaChange(event, questionId, metaName) {
   updateMetaRecord(questionId, newValue, metaName)
 }
 
+async function updateIsOptionCorrect(optionId, isCorrect) {
+  const url = '/api/options.php'
+
+  const response = await sendPut(url, {
+    optionId,
+    isCorrect,
+  })
+
+  const as_json = await response.text()
+  console.log(as_json)
+}
+
+function handleToggle(event, optionId) {
+  updateIsOptionCorrect(optionId, event.target.checked)
+}
+
 function render() {
   const questions_ol = document.querySelector("ol#questions")
   questions_ol.innerHTML = ""
@@ -198,13 +250,36 @@ function render() {
       answer_input.placeholder = "Отоговор"
       answer_input.value = option.opt
 
+      const is_correct_toggle_input = document.createElement("input")
+      is_correct_toggle_input.id = `option-${option.id}`
+      is_correct_toggle_input.checked = option.is_correct
+      is_correct_toggle_input.type = "checkbox"
+      is_correct_toggle_input.onclick = (event) => handleToggle(event, option.id)
+
+      const is_correct_toggle_label = document.createElement("label")
+      is_correct_toggle_label.setAttribute("for", `option-${option.id}`)
+      is_correct_toggle_label.classList.add("check-trail")
+
+      const is_correct_l_span = document.createElement("span")
+      is_correct_l_span.classList.add("check-handler")
+
+      is_correct_toggle_label.append(is_correct_l_span)
+
+      const toggle_wrapper_div = document.createElement("div")
+      toggle_wrapper_div.append(
+        is_correct_toggle_input,
+        is_correct_toggle_label,
+      )
+
       const remove_answer_btn = document.createElement("button")
       remove_answer_btn.classList.add("btn-danger")
+      remove_answer_btn.classList.add("option")
       remove_answer_btn.onclick = () => removeAnswer(question.id, option.id)
       remove_answer_btn.innerHTML = "&times;"
 
       answer_input_grp_div.append(
         answer_input,
+        toggle_wrapper_div,
         remove_answer_btn,
       )
 
@@ -303,4 +378,21 @@ async function deleteOptionRecord(optionId) {
 
 function removeAnswer(questionId, answerId) {
   deleteOptionRecord(answerId).then(() => loadQuestions())
+}
+
+async function setReferatSelection(referatId) {
+  const url = "/api/referats.php"
+
+  const response = await sendPut(url, {
+    referatId,
+  })
+
+  const as_json = await response.text()
+  console.log(as_json)
+}
+
+function handleReferatPick(event) {
+  setReferatSelection(event.target.selectedOptions[0].getAttribute("referat-id"))
+    .then(() => loadReferats)
+    .then(() => loadQuestions())
 }

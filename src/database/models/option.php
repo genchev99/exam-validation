@@ -131,4 +131,19 @@ class OptionModel extends PDOStatement {
 
         return $question_model->is_owner($user_id, $option['question_id']);
     }
+
+    public function update_is_correct($option_id, $is_correct) {
+        $sql = "UPDATE Options SET is_correct=:value, updated_at=NOW() WHERE id=:option_id";
+
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':option_id', $option_id);
+            $statement->bindValue(':value', $is_correct, PDO::PARAM_BOOL);
+            $statement->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 }

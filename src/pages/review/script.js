@@ -131,7 +131,7 @@ function render() {
       comment.className = 'comment-item'
 
       const name = document.createElement('span')
-      name.innerHTML = `${fetchedComment.username}, ${fetchedComment.fn}`
+      name.innerHTML = `${fetchedComment.username}[${fetchedComment.fn}] написа:`
       commentsList.appendChild(name)
       commentsList.appendChild(comment)
     }

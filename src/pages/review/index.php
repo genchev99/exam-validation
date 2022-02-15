@@ -14,6 +14,8 @@ if (!isset($_COOKIE['token'])) {
 <head>
   <meta charset="UTF-8">
   <title>Рецензия</title>
+  <link href="../global_style.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="../questions/style.css">
   <link rel="stylesheet" href="style.css">
@@ -23,14 +25,8 @@ if (!isset($_COOKIE['token'])) {
 </head>
 
 <body class="loggedin">
+  <?php include('../navigation.php'); ?>
   <div>
-    <nav class="navtop">
-      <div>
-        <h1>Puffin Въпросник</h1>
-        <a href="profile.php"><i class="fas fa-user-circle"></i>Моят профил</a>
-        <a href="../../logout.php"><i class="fas fa-sign-out-alt"></i>Изход</a>
-      </div>
-    </nav>
     <div class="content">
       <h2>Рецензия</h2>
       <div id="root" class="generator">
