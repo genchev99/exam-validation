@@ -18,8 +18,6 @@ if (!isset($_COOKIE['token'])) {
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="../questions/style.css">
-  <link rel="stylesheet" href="style.css">
-
 
   <script src="script.js"></script>
 </head>
@@ -34,7 +32,7 @@ if (!isset($_COOKIE['token'])) {
         <span class="custom-dropdown big">
           <label for="referat">Избор на реферат</label>
           <select id="referat">
-            <option>Unloaded</option>
+            <option>Зареждане...</option>
           </select>
         </span>
       </div>

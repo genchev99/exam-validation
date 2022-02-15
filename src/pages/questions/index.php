@@ -32,7 +32,7 @@ if (!isset($_COOKIE['token'])) {
       <span class="custom-dropdown big">
         <label for="referat">Избор на реферат</label>
         <select id="referat">
-          <option>Unloaded</option>
+          <option>Зареждане...</option>
         </select>
       </span>
     </div>

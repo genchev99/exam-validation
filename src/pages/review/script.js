@@ -155,6 +155,8 @@ function render() {
     )
   }
 }
+let question = []
+let comments = []
 
 async function loadQuestions() {
   const fetchedQuestions = await getQuestions()

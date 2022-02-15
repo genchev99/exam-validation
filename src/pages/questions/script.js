@@ -62,6 +62,16 @@ async function loadQuestions() {
     type: fq.type,
   }))
 
+  const fetchedComments = await getAllComments()
+  comments = fetchedComments.map(comment => ({
+    id: comment.id,
+    comment: comment.comment,
+    questionId: comment.question_id,
+    userId: comment.user_id,
+    username: comment.username,
+    fn: comment.faculty_number
+  }))
+
   render()
 }
 
@@ -311,11 +321,38 @@ function render() {
       createInputGroupMeta("Забележка", question, "note"),
     )
 
+    const add_comment_button = document.createElement('button')
+    add_comment_button.innerHTML = 'Добави коментар'
+    add_comment_button.className = 'btn-info'
+    add_comment_button.id = 'add_comment_button'
+    add_comment_button.onclick = (event) => {
+      li.append(createCommentArea('Коментар', question, 'test'))
+      event.target.parentNode.removeChild(event.target);
+    }
+
+    currentQuestionComments = comments.filter(comment => comment.questionId === question.id)
+    const commentsList = document.createElement('ul')
+    for (const fetchedComment of currentQuestionComments) {
+      commentsList.className = 'posts'
+      const comment = document.createElement('li')
+      comment.innerHTML = fetchedComment.comment
+      comment.className = 'comment-item'
+
+      const name = document.createElement('span')
+      name.innerHTML = `${fetchedComment.username}[${fetchedComment.fn}] написа:`
+      commentsList.appendChild(name)
+      commentsList.appendChild(comment)
+    }
+
+
     li.append(
       question_input_grp_div,
       answers_div,
 
       question_meta_div,
+      commentsList,
+      add_comment_button,
+
     )
 
     questions_ol.append(
@@ -395,4 +432,46 @@ function handleReferatPick(event) {
   setReferatSelection(event.target.selectedOptions[0].getAttribute("referat-id"))
     .then(() => loadReferats)
     .then(() => loadQuestions())
+}
+
+async function getAllComments() {
+  const response = await fetch('/api/comments.php?')
+  const {success, data} = await response.json()
+
+  if (!success) {
+    alert("Error: There was a problem while fetching the questions!");
+  }
+
+  return data
+}
+
+function createCommentArea(text, question, metaName) {
+  const input_grp_div = document.createElement("div")
+  input_grp_div.classList.add("input-group")
+
+  const input = document.createElement("textarea")
+  input.id = metaName
+  input.type = "text"
+  input.placeholder = text
+  input.innerHTML = ''
+
+  const button = document.createElement('button')
+  button.textContent = 'Запази'
+  button.className = 'btn-info'
+  button.onclick = (event) => {
+    createCommentRecord(input.value, question.id)
+    loadQuestions()
+  }
+
+  input_grp_div.append(
+    input,
+    button
+  )
+
+  return input_grp_div
+}
+
+async function createCommentRecord(comment, questionId) {
+  const url = '/api/comments.php'
+  await sendPost(url, {comment, questionId })
 }
