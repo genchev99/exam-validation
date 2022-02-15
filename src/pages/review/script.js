@@ -1,5 +1,14 @@
-async function getQuestions() {
-  const response = await fetch('/api/questions.php')
+window.addEventListener('DOMContentLoaded', () => {
+  const selectReferat = document.querySelector("select#referat")
+  selectReferat.onchange = (event) => handleReferatPick(event)
+
+  // Load referats
+  loadReferats(selectReferat).then(()=> loadQuestions(selectReferat.selectedOptions[0].getAttribute("referat-id")))
+});
+
+async function getQuestions(referatId) {
+
+  const response = await fetch(`/api/questions.php?referat_id=${referatId}`)
   const {success, data} = await response.json()
 
   if (!success) {
@@ -48,8 +57,11 @@ async function createCommentRecord(comment, questionId) {
   await sendPost(url, {comment, questionId })
 }
 
+
+
+
 function render() {
-  referats()
+  // referats()
   const questions_ol = document.querySelector("ol#questions")
   if (!questions.length) {
     questions_ol.innerHTML = 'Няма добавени въпроси за този реферат. Можеш да добавиш въпроси от "Моите въпроси"'
@@ -158,8 +170,8 @@ function render() {
 let question = []
 let comments = []
 
-async function loadQuestions() {
-  const fetchedQuestions = await getQuestions()
+async function loadQuestions(referatId) {
+  const fetchedQuestions = await getQuestions(referatId)
   questions = fetchedQuestions.map(fq => ({
     id: fq.id,
     question: fq.question,
@@ -243,9 +255,8 @@ async function setReferatSelection(referatId) {
 }
 
 function handleReferatPick(event) {
-  setReferatSelection(event.target.selectedOptions[0].getAttribute("referat-id"))
-    .then(() => loadReferats)
-    .then(() => loadQuestions())
+  console.log(event.target.selectedIndex)
+  loadQuestions(event.target.selectedOptions[0].getAttribute("referat-id"))
 }
 
 function referats()  {
@@ -256,7 +267,7 @@ function referats()  {
   loadReferats(selectReferat)
 }
 
-async function loadReferats(selectHandle) {
+async function loadReferats(selectHandle, referatId) {
   const {data: referats, selected} = await getReferats()
   selectHandle.innerHTML = ""
 
@@ -269,7 +280,7 @@ async function loadReferats(selectHandle) {
     selectHandle.append(option)
   }
 
-  selectHandle.selectedIndex = referats.map(referat => referat.id === selected).indexOf(true)
+  // selectHandle.selectedIndex = referats.map(referat => referat.id === selected).indexOf(true)
 }
 
 async function getReferats() {

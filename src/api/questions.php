@@ -23,6 +23,15 @@ function handle()
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $question_model = new QuestionModel();
+    if (isset($_GET['referat_id'])) {
+      $referat_id = $_GET['referat_id'];
+      echo json_encode([
+        "success" => true,
+        //            "data" => $question_model->select_by_user_id($user_id)
+        "data" => $question_model->select_all($referat_id)
+      ], JSON_UNESCAPED_UNICODE);
+      return;
+    }
     echo json_encode([
       "success" => true,
       //            "data" => $question_model->select_by_user_id($user_id)
