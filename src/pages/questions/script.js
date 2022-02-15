@@ -1,3 +1,39 @@
+(() => {
+  const selectReferat = document.querySelector("select#referat")
+  selectReferat.onchange = (event) => handleReferatPick(event)
+
+  // Load referats
+  loadReferats(selectReferat)
+})();
+
+async function loadReferats(selectHandle) {
+  const {data: referats, selected} = await getReferats()
+  selectHandle.innerHTML = ""
+
+  for (const referat of referats) {
+    const option = document.createElement("option")
+    option.textContent = referat.referat_title
+    option.id = `referat-${referat.id}`
+    option.setAttribute("referat-id", referat.id)
+
+    selectHandle.append(option)
+  }
+
+  selectHandle.selectedIndex = referats.map(referat => referat.id === selected).indexOf(true)
+}
+
+async function getReferats() {
+  const response = await fetch('/api/referats.php')
+  const {success, data, selected} = await response.json()
+
+  if (!success) {
+    alert("Error: There was a problem while fetching referats!");
+    throw new Error("referats")
+  }
+
+  return {data, selected}
+}
+
 let questions = []
 
 async function getQuestions() {
@@ -342,4 +378,21 @@ async function deleteOptionRecord(optionId) {
 
 function removeAnswer(questionId, answerId) {
   deleteOptionRecord(answerId).then(() => loadQuestions())
+}
+
+async function setReferatSelection(referatId) {
+  const url = "/api/referats.php"
+
+  const response = await sendPut(url, {
+    referatId,
+  })
+
+  const as_json = await response.text()
+  console.log(as_json)
+}
+
+function handleReferatPick(event) {
+  setReferatSelection(event.target.selectedOptions[0].getAttribute("referat-id"))
+    .then(() => loadReferats)
+    .then(() => loadQuestions())
 }

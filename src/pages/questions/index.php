@@ -25,6 +25,16 @@ if (!isset($_COOKIE['token'])) {
 
 <div class="content">
     <h2>Мойте въпроси</h2>
+
+    <div id="referat-select">
+        <span class="custom-dropdown big">
+            <label for="referat">Избор на реферат</label>
+            <select id="referat">
+                <option>Unloaded</option>
+            </select>
+        </span>
+    </div>
+
     <div id="root" class="generator">
         <div class="group">
             <button class="btn-info" onclick="addQuestion()">Добавяне на въпрос</button>

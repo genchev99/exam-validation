@@ -22,7 +22,11 @@ function handle() {
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $question_model = new QuestionModel();
-        echo json_encode(["success" => true, "data" => $question_model->select_by_user_id($user_id)], JSON_UNESCAPED_UNICODE);
+        echo json_encode([
+            "success" => true,
+//            "data" => $question_model->select_by_user_id($user_id)
+            "data" => $question_model->select_by_user_and_referat($user_id, $_SESSION['referat_id'])
+        ], JSON_UNESCAPED_UNICODE);
         return;
     }
 
@@ -79,7 +83,7 @@ function handle() {
          */
         $question_model = new QuestionModel();
 
-        $question_model->create_empty($user_id);
+        $question_model->create_empty($user_id, $_SESSION['referat_id']);
         echo json_encode(["success" => true]);
     }
 }
