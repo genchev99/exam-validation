@@ -3,23 +3,13 @@ window.addEventListener('DOMContentLoaded', () => {
   selectReferat.onchange = (event) => handleReferatPick(event)
 
   // Load referats
-  loadReferats(selectReferat).then(()=> loadQuestions(selectReferat.selectedOptions[0].getAttribute("referat-id")))
+  loadReferats(selectReferat)
+    .then(() => loadQuestions(selectReferat.selectedOptions[0].getAttribute("referat-id")))
 });
 
 async function getQuestions(referatId) {
 
   const response = await fetch(`/api/questions.php?referat_id=${referatId}`)
-  const {success, data} = await response.json()
-
-  if (!success) {
-    alert("Error: There was a problem while fetching the questions!");
-  }
-
-  return data
-}
-
-async function getComments(question_id) {
-  const response = await fetch(`/api/comments.php?question_id=${question_id}`)
   const {success, data} = await response.json()
 
   if (!success) {
@@ -54,14 +44,10 @@ async function sendPost(url, body) {
 
 async function createCommentRecord(comment, questionId) {
   const url = '/api/comments.php'
-  await sendPost(url, {comment, questionId })
+  await sendPost(url, {comment, questionId})
 }
 
-
-
-
 function render() {
-  // referats()
   const questions_ol = document.querySelector("ol#questions")
   if (!questions.length) {
     questions_ol.innerHTML = 'Няма добавени въпроси за този реферат. Можеш да добавиш въпроси от "Моите въпроси"'
@@ -119,8 +105,6 @@ function render() {
     question_meta_title.classList.add("group-title")
     question_meta_title.textContent = "Допълнителна информация за въпроса"
 
-    
-
     question_meta_div.append(question_meta_title)
 
     question_meta_div.append(
@@ -129,7 +113,7 @@ function render() {
       createInputGroupMeta("Обратна връзка при грешен отговор", question, "response_on_incorrect"),
       createInputGroupMeta("Забележка", question, "note"),
     )
-   
+
     const add_comment_button = document.createElement('button')
     add_comment_button.innerHTML = 'Добави коментар'
     add_comment_button.className = 'btn-info'
@@ -139,7 +123,7 @@ function render() {
       event.target.parentNode.removeChild(event.target);
     }
 
-    currentQuestionComments = comments.filter(comment => comment.questionId === question.id)
+    let currentQuestionComments = comments.filter(comment => comment.questionId === question.id)
     const commentsList = document.createElement('ul')
     for (const fetchedComment of currentQuestionComments) {
       commentsList.className = 'posts'
@@ -167,6 +151,7 @@ function render() {
     )
   }
 }
+
 let question = []
 let comments = []
 
@@ -196,10 +181,6 @@ async function loadQuestions(referatId) {
   render()
 }
 
-(async () => {
-  await loadQuestions()
-})()
-
 function createInputGroupMeta(text, question, metaName) {
   const input_grp_div = document.createElement("div")
   input_grp_div.classList.add("input-group")
@@ -217,6 +198,13 @@ function createInputGroupMeta(text, question, metaName) {
   return input_grp_div
 }
 
+function uploadCommentRecord(input, questionId) {
+  const select = document.querySelector("select#referat")
+
+  createCommentRecord(input.value, questionId)
+    .then(() => loadQuestions(select.selectedOptions[0].getAttribute("referat-id")))
+}
+
 function createCommentArea(text, question, metaName) {
   const input_grp_div = document.createElement("div")
   input_grp_div.classList.add("input-group")
@@ -230,10 +218,7 @@ function createCommentArea(text, question, metaName) {
   const button = document.createElement('button')
   button.textContent = 'Запази'
   button.className = 'btn-info'
-  button.onclick = (event) => {
-    createCommentRecord(input.value, question.id)
-    loadQuestions()
-  }
+  button.onclick = () => uploadCommentRecord(input, question.id)
 
   input_grp_div.append(
     input,
@@ -257,14 +242,6 @@ async function setReferatSelection(referatId) {
 function handleReferatPick(event) {
   console.log(event.target.selectedIndex)
   loadQuestions(event.target.selectedOptions[0].getAttribute("referat-id"))
-}
-
-function referats()  {
-  const selectReferat = document.getElementById('referat')
-  selectReferat.onchange = (event) => handleReferatPick(event)
-
-  // Load referats
-  loadReferats(selectReferat)
 }
 
 async function loadReferats(selectHandle, referatId) {
