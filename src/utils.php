@@ -52,7 +52,7 @@ function object_to_html_download($object, $filename = "export.html") {
 }
 
 function first_index_of_arr_of_objects($arr, $key, $value): int {
-    $index = 0;
+    $index = 1;
     foreach ($arr as $obj) {
         if (isset($obj[$key]) && $obj[$key] == $value) {
             return $index;
