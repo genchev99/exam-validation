@@ -352,7 +352,6 @@ function render() {
       question_meta_div,
       commentsList,
       add_comment_button,
-
     )
 
     questions_ol.append(
@@ -459,8 +458,7 @@ function createCommentArea(text, question, metaName) {
   button.textContent = 'Запази'
   button.className = 'btn-info'
   button.onclick = (event) => {
-    createCommentRecord(input.value, question.id)
-    loadQuestions()
+    createCommentRecord(input.value, question.id).then(() => loadQuestions())
   }
 
   input_grp_div.append(
@@ -473,5 +471,5 @@ function createCommentArea(text, question, metaName) {
 
 async function createCommentRecord(comment, questionId) {
   const url = '/api/comments.php'
-  await sendPost(url, {comment, questionId })
+  await sendPost(url, {comment, questionId})
 }

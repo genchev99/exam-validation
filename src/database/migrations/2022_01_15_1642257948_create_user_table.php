@@ -13,6 +13,7 @@ class CreateUserTable {
             username VARCHAR(64) NOT NULL,
             password_hash VARCHAR(128) NOT NULL,
             faculty_number VARCHAR(16) NOT NULL,
+            is_admin BOOLEAN DEFAULT FALSE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )';

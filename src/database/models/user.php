@@ -10,6 +10,7 @@ class UserModel extends PDOStatement
   public $username;
   public $password_hash;
   public $faculty_number;
+  public $is_admin;
   public $created_at;
   public $updated_at;
 
@@ -39,6 +40,7 @@ class UserModel extends PDOStatement
     $record->username = $dict['username'];
     $record->password_hash = $dict['password_hash'];
     $record->faculty_number = $dict['faculty_number'];
+    $record->is_admin = $dict['is_admin'];
     $record->created_at = $dict['created_at'];
     $record->updated_at = $dict['updated_at'];
 
