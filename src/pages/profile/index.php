@@ -37,7 +37,7 @@ if (!isset($_COOKIE['token'])) {
 
         </div>
         <?php if ($_SESSION['is_admin']) { ?>
-            <button id="export" class="btn-info">Екоспортиране на всички въпроси</button>
+            <button id="export" class="btn-info" onclick="handleOnClickExport()">Екоспортиране на всички въпроси</button>
         <?php } ?>
     </div>
 </div>

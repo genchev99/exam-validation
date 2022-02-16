@@ -29,13 +29,10 @@ async function exportQuestionsAsCsv() {
 }
 
 function handleOnClickExport(event) {
-  console.log("hoi")
   exportQuestionsAsCsv()
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  document.querySelector("button#export").onclick = handleOnClickExport
-
   getUser().then((user) => {
     document.getElementById('name').innerHTML = user.username
     document.getElementById('fn').innerHTML = user.faculty_number

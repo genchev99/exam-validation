@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../database/models/question.php";
 require_once __DIR__ . "/../database/models/token.php";
+require_once __DIR__ . "/../database/models/user.php";
 require_once __DIR__ . "/../utils.php";
 
 session_start();
@@ -22,8 +23,14 @@ function handle() {
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $question_model = new QuestionModel();
+        $user_model = new UserModel();
 
         if (isset($_GET['export_csv'])) {
+            if (!$user_model->is_admin($user_id)) {
+                http_response_code(403);
+                exit("Unauthorized");
+            }
+
             $all_questions = $question_model->export_all();
             $headers = array('Timestamp', 'Факултетен номер', 'Номер на въпроса', 'Цел на въпроса', 'Въпрос', 'Опция 1', 'Опция 2', 'Опция 3', 'Опция 4', 'Верен отговор', 'Ниво на трудност', 'Обратна връзка при верен отговор', 'Обратна връзка при грешен отговор', 'Забележка', 'Тип на въпроса');
             $csv = array($headers);

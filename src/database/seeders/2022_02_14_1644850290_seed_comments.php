@@ -1,17 +1,14 @@
 <?php
 require_once(__DIR__ . '/../config.php');
 
-class SeedComments
-{
-  private function connection()
-  {
-    return new PDOConfig();
-  }
+class SeedComments {
+    private function connection() {
+        return new PDOConfig();
+    }
 
-  public function seed()
-  {
-    $table_name = 'Comments';
-    $sql = 'INSERT INTO `' . $table_name . "` (
+    public function seed() {
+        $table_name = 'Comments';
+        $sql = 'INSERT INTO `' . $table_name . "` (
             comment,
             question_id,
             user_id
@@ -22,16 +19,16 @@ class SeedComments
         ('За този въпрос повече информация можем да получим от секция 3 в реферата, а не секция 2!', '2', '2')
 
         ";
-    try {
-      $connection = $this->connection();
-      $statement = $connection->prepare($sql);
-      $statement->execute();
-      $connection = null;
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->execute();
+            $connection = null;
 
-      return true;
-    } catch (PDOException $e) {
-      echo $e->getMessage();
-      return false;
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
-  }
 }
