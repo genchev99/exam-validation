@@ -352,7 +352,6 @@ function render() {
       question_meta_div,
       commentsList,
       add_comment_button,
-
     )
 
     questions_ol.append(
@@ -459,8 +458,7 @@ function createCommentArea(text, question, metaName) {
   button.textContent = 'Запази'
   button.className = 'btn-info'
   button.onclick = (event) => {
-    createCommentRecord(input.value, question.id)
-    loadQuestions()
+    createCommentRecord(input.value, question.id).then(() => loadQuestions())
   }
 
   input_grp_div.append(
@@ -473,5 +471,32 @@ function createCommentArea(text, question, metaName) {
 
 async function createCommentRecord(comment, questionId) {
   const url = '/api/comments.php'
-  await sendPost(url, {comment, questionId })
+  await sendPost(url, {comment, questionId})
+}
+
+async function download(format) {
+  if (!['json', 'html'].includes(format)) {
+    alert("Only json and html support as export")
+    throw new Error("")
+  }
+
+  await fetch(`/api/questions.php?export=1&format=${format}`)
+    .then(response => response.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `export.${format}`; // hardcoded af
+      document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+      a.click();
+      a.remove();  //afterwards we remove the element again
+    });
+}
+
+function handleDownloadAsJsonClick() {
+  download('json')
+}
+
+function handleDownloadAsHtmlClick() {
+  download('html')
 }

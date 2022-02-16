@@ -1,17 +1,14 @@
 <?php
 require_once(__DIR__ . '/../config.php');
 
-class CreateCommentTable
-{
-  private function connection()
-  {
-    return new PDOConfig();
-  }
+class CreateCommentTable {
+    private function connection() {
+        return new PDOConfig();
+    }
 
-  public function up()
-  {
-    $table_name = 'Comments';
-    $sql = 'CREATE TABLE `' . $table_name . '` (
+    public function up() {
+        $table_name = 'Comments';
+        $sql = 'CREATE TABLE `' . $table_name . '` (
             id INT AUTO_INCREMENT PRIMARY KEY,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -26,35 +23,34 @@ class CreateCommentTable
                 ON DELETE CASCADE
         )';
 
-    try {
-      $connection = $this->connection();
-      $statement = $connection->prepare($sql);
-      $statement->execute();
-      $connection = null;
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->execute();
+            $connection = null;
 
-      return true;
-    } catch (PDOException $e) {
-      echo $e->getMessage();
-      return false;
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
-  }
 
-  public function down()
-  {
-    $table_name = 'Comments';
-    $sql = 'DROP TABLE IF EXISTS `' . $table_name . '`';
+    public function down() {
+        $table_name = 'Comments';
+        $sql = 'DROP TABLE IF EXISTS `' . $table_name . '`';
 
-    try {
-      $connection = $this->connection();
-      $statement = $connection->prepare($sql);
-      $statement->execute();
-      $connection = null;
+        try {
+            $connection = $this->connection();
+            $statement = $connection->prepare($sql);
+            $statement->execute();
+            $connection = null;
 
-      return true;
-    } catch (PDOException $e) {
-      echo $e->getMessage();
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
 
-      return false;
+            return false;
+        }
     }
-  }
 }

@@ -33,6 +33,8 @@ function handle() {
         if ($user_model->is_using_valid_credentials($user, $password)) {
             $_SESSION['username'] = $user->username;
             $_SESSION['user_id'] = $user->id;
+            $_SESSION['is_admin'] = $user->is_admin;
+
             if (!isset($_SESSION['referat_id'])) {
                 $_SESSION['referat_id'] = 1;
             }

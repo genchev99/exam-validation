@@ -6,6 +6,15 @@
    грешки)
 3. Експорт на теста във формат за импорт/експорт от мудъл
 
+## Setup and run
+
+```bash
+./bin/dev_setup.sh
+./bin/update.sh
+docker-compose up -d
+./bin/reset_dev_db.sh
+```
+
 ## Import csv data sample
 
 ```csv
