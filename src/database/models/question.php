@@ -83,8 +83,7 @@ class QuestionModel extends PDOStatement {
         }
     }
 
-
-    public function select_all($referat_id, $as_json = true, $join_options = true) {
+    public function select_by_referat($referat_id, $as_json = true, $join_options = true) {
         $sql = "SELECT * FROM Questions WHERE referat_id=:referat_id";
 
         try {

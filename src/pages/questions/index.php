@@ -39,7 +39,13 @@ if (!isset($_COOKIE['token'])) {
 
     <div id="root" class="generator">
         <div class="group">
-            <button class="btn-info" onclick="addQuestion()">Добавяне на въпрос</button>
+            <div id="controls">
+                <button class="btn-info" onclick="addQuestion()">Добавяне на въпрос</button>
+                <div id="download">
+                    <button class="btn-warn" onclick="handleDownloadAsJsonClick()"><i class="fa-solid fa-cloud-arrow-down"></i>JSON</button>
+                    <button class="btn-warn" onclick="handleDownloadAsHtmlClick()"><i class="fa-solid fa-cloud-arrow-down"></i>HTML</button>
+                </div>
+            </div>
             <ol id="questions"></ol>
         </div>
     </div>

@@ -140,6 +140,12 @@ button.btn-info {
 	border-color: #3a87ad;
 }
 
+button.btn-warn {
+	background-color: #fac661;
+	color: #fff;
+	border-color: #d6a442;
+}
+
 .input-group {
 	margin: 8px 0;
 	display: flex;
@@ -261,4 +267,19 @@ div#referat-select {
 	word-wrap: break-word;
 	min-height: 42px;
 	box-shadow: 8px 8px 5px #888888;
+}
+
+div#controls {
+	display: flex;
+	justify-content: space-between;
+}
+
+div#controls div#download {
+	width: 20%;
+	display: flex;
+	justify-content: space-around;
+}
+
+div#controls div#download i {
+	padding: 2px 8px 0 0;
 }

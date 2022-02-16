@@ -11,7 +11,7 @@ async function getUser() {
 
 async function exportQuestionsAsCsv() {
   try {
-    await fetch('/api/questions.php?export_csv=1')
+    await fetch('/api/questions.php?export=1&format=csv')
       .then(response => response.blob())
       .then(blob => {
         const url = window.URL.createObjectURL(blob);
