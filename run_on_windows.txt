@@ -1,0 +1,12 @@
+1. Install Linux
+
+JK JK
+
+1. copy the envtemplate to .env
+2. set MYSQL_PASSWORD to something random
+3. if you have ran this project before (and you want to change the password) make sure to prune the database volume  "mysqldata"
+4. docker-compose build
+5. docker-compose up -d
+6. docker-compose run app php "./database/scripts/migrate.php" -d down
+7. docker-compose run app php "./database/scripts/migrate.php" -d up
+8. docker-compose run app php "./database/scripts/seed.php"
