@@ -10,9 +10,9 @@ function test_input($input): string {
     return stripslashes($input);
 }
 
-function array_to_csv_download($array, $filename = "export.csv", $delimiter=";") {
+function array_to_csv_download($array, $filename = "export.csv", $delimiter = ";") {
     header('Content-Type: application/csv');
-    header('Content-Disposition: attachment; filename="'.$filename.'";');
+    header('Content-Disposition: attachment; filename="' . $filename . '";');
 
     // open the "output" stream
     // see http://www.php.net/manual/en/wrappers.php.php#refsect2-wrappers.php-unknown-unknown-unknown-descriptioq
